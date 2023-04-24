@@ -1,0 +1,51 @@
+spring:
+  application:
+    name: cloud-goods # 微服务应用的名字 必须要有
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+        username: nacos
+        password: nacos
+  datasource:
+    url: jdbc:mysql://localhost:3306/cloud2218?serverTimezone=Asia/Shanghai&useSSL=false&useUnicode=true&characterEncoding=UTF-8
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: Xytt
+# mybatis
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: org.example.cloudentity.domain
+  configuration:
+    map-underscore-to-camel-case: true
+# 日志
+logging:
+  level:
+    com.qf.cloudgoods.dao: debug
+
+
+# 本服务的端口号
+# 商品服务默认使用9001端口
+# 多实例运行时从外界指定端口可以使用port指定端口
+server:
+  port: ${port:9001}
+
+seata:
+  enabled: true
+  enable-auto-data-source-proxy: true
+  config:
+    type: nacos
+    nacos:
+      server-addr: 127.0.0.1:8848
+      group: SEATA_GROUP
+      username: nacos
+      password: nacos
+      data-id: seataServer.properties
+  registry:
+    type: nacos
+    nacos:
+      application: seata-server
+      server-addr: 127.0.0.1:8848
+      group: SEATA_GROUP
+      username: nacos
+      password: nacos

@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.example.cloudskill.dao.TSkillgoodsDao">
+
+    <resultMap type="org.example.cloudskill.entity.TSkillgoods" id="TSkillgoodsMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="title" column="title" jdbcType="VARCHAR"/>
+        <result property="picurl" column="picurl" jdbcType="VARCHAR"/>
+        <result property="info" column="info" jdbcType="VARCHAR"/>
+        <result property="price" column="price" jdbcType="NUMERIC"/>
+        <result property="currprice" column="currprice" jdbcType="NUMERIC"/>
+        <result property="stock" column="stock" jdbcType="INTEGER"/>
+        <result property="flag" column="flag" jdbcType="INTEGER"/>
+        <result property="itemId" column="item_id" jdbcType="INTEGER"/>
+        <result property="ctime" column="ctime" jdbcType="TIMESTAMP"/>
+        <result property="said" column="said" jdbcType="INTEGER"/>
+        <result property="htmlurl" column="htmlurl" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="TSkillgoodsMap">
+        select id,
+               title,
+               picurl,
+               info,
+               price,
+               currprice,
+               stock,
+               flag,
+               item_id,
+               ctime,
+               said,
+               htmlurl
+        from t_skillgoods
+        where id = #{id}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAll" resultMap="TSkillgoodsMap">
+        select id,
+               title,
+               picurl,
+               info,
+               price,
+               currprice,
+               stock,
+               flag,
+               item_id,
+               ctime,
+               said,
+               htmlurl
+        from t_skillgoods
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into t_skillgoods(title, picurl, info, price, currprice, stock, flag, item_id, ctime, said, htmlurl)
+        values (#{title}, #{picurl}, #{info}, #{price}, #{currprice}, #{stock}, #{flag}, #{itemId}, #{ctime}, #{said},
+                #{htmlurl})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into t_skillgoods(title, picurl, info, price, currprice, stock, flag, item_id, ctime, said, htmlurl)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.title}, #{entity.picurl}, #{entity.info}, #{entity.price}, #{entity.currprice}, #{entity.stock},
+            #{entity.flag}, #{entity.itemId}, #{entity.ctime}, #{entity.said}, #{entity.htmlurl})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into t_skillgoods(title, picurl, info, price, currprice, stock, flag, item_id, ctime, said, htmlurl)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.title}, #{entity.picurl}, #{entity.info}, #{entity.price}, #{entity.currprice}, #{entity.stock},
+            #{entity.flag}, #{entity.itemId}, #{entity.ctime}, #{entity.said}, #{entity.htmlurl})
+        </foreach>
+        on duplicate key update
+        title = values(title),
+        picurl = values(picurl),
+        info = values(info),
+        price = values(price),
+        currprice = values(currprice),
+        stock = values(stock),
+        flag = values(flag),
+        item_id = values(item_id),
+        ctime = values(ctime),
+        said = values(said),
+        htmlurl = values(htmlurl)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update t_skillgoods
+        <set>
+            <if test="title != null and title != ''">
+                title = #{title},
+            </if>
+            <if test="picurl != null and picurl != ''">
+                picurl = #{picurl},
+            </if>
+            <if test="info != null and info != ''">
+                info = #{info},
+            </if>
+            <if test="price != null">
+                price = #{price},
+            </if>
+            <if test="currprice != null">
+                currprice = #{currprice},
+            </if>
+            <if test="stock != null">
+                stock = #{stock},
+            </if>
+            <if test="flag != null">
+                flag = #{flag},
+            </if>
+            <if test="itemId != null">
+                item_id = #{itemId},
+            </if>
+            <if test="ctime != null">
+                ctime = #{ctime},
+            </if>
+            <if test="said != null">
+                said = #{said},
+            </if>
+            <if test="htmlurl != null and htmlurl != ''">
+                htmlurl = #{htmlurl},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from t_skillgoods
+        where id = #{id}
+    </delete>
+
+    <select id="findGoodsDetailDTOById" parameterType="int" resultType="org.example.cloudskill.dto.SkillGoodsDetailDto">
+        select sg.said,
+               sg.id    as sgid,
+               sa.title,
+               sa.stime,
+               sa.etime,
+               sa.maxcount,
+               sg.title as gtitle,
+               sg.picurl,
+               sg.info,
+               sg.price,
+               sg.currprice,
+               sg.stock,
+               sg.flag
+        from t_skillactivity sa
+                 inner join t_skillgoods sg
+                            on sa.id = sg.said
+        where sg.id = #{id}
+    </select>
+    <select id="findBySaid" resultType="org.example.cloudskill.entity.TSkillgoods">
+        select id,
+               title,
+               picurl,
+               info,
+               price,
+               currprice,
+               stock,
+               flag,
+               item_id,
+               ctime,
+               said,
+               htmlurl
+        from t_skillgoods
+        where said = #{said}
+
+    </select>
+
+
+</mapper>
+

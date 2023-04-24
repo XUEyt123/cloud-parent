@@ -1,0 +1,11 @@
+# Project exclude paths
+/cloud-api/target/
+/cloud-chat/target/
+/cloud-common/target/
+/cloud-coupon/target/
+/cloud-entity/target/
+/cloud-gateway/target/
+/cloud-goods/target/
+/cloud-jifen/target/
+/cloud-orders/target/
+/cloud-skill/target/

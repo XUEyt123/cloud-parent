@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.example.cloudorders.dao.TbOrderDao">
+
+    <resultMap type="org.example.cloudentity.domain.TbOrder" id="TbOrderMap">
+        <result property="orderId" column="order_id" jdbcType="INTEGER"/>
+        <result property="orderNum" column="order_num" jdbcType="INTEGER"/>
+        <result property="orderAmount" column="order_amount" jdbcType="NUMERIC"/>
+        <result property="goodsId" column="goods_id" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="TbOrderMap">
+        select
+            order_id, order_num, order_amount, goods_id
+        from tb_order
+        where order_id = #{orderId}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAll" resultMap="TbOrderMap">
+        select
+            order_id, order_num, order_amount, goods_id
+        from tb_order
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="orderId" useGeneratedKeys="true">
+        insert into tb_order(order_num, order_amount, goods_id)
+        values (#{orderNum}, #{orderAmount}, #{goodsId})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="orderId" useGeneratedKeys="true">
+        insert into tb_order(order_num, order_amount, goods_id)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.orderNum}, #{entity.orderAmount}, #{entity.goodsId})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="orderId" useGeneratedKeys="true">
+        insert into tb_order(order_num, order_amount, goods_id)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.orderNum}, #{entity.orderAmount}, #{entity.goodsId})
+        </foreach>
+        on duplicate key update
+        order_num = values(order_num),
+        order_amount = values(order_amount),
+        goods_id = values(goods_id)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update tb_order
+        <set>
+            <if test="orderNum != null">
+                order_num = #{orderNum},
+            </if>
+            <if test="orderAmount != null">
+                order_amount = #{orderAmount},
+            </if>
+            <if test="goodsId != null">
+                goods_id = #{goodsId},
+            </if>
+        </set>
+        where order_id = #{orderId}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from tb_order where order_id = #{orderId}
+    </delete>
+
+</mapper>
+

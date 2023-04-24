@@ -1,0 +1,117 @@
+spring:
+  application:
+    name: cloud-skill
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+        username: nacos
+        password: nacos
+    # sentinel配置
+    sentinel:
+      eager: true
+      transport:
+        dashboard: localhost:8888
+        port: 8719
+      web-context-unify: false # 可以根据不同的URL进行链路限流
+      # sentinel规则保存到nacos数据源中
+      datasource:
+        flow:
+          nacos:
+            server-addr: ${spring.cloud.nacos.discovery.server-addr}
+            username: ${spring.cloud.nacos.discovery.username}
+            password: ${spring.cloud.nacos.discovery.password}
+            groupId: SENTINEL_GROUP
+            dataId: ${spring.application.name}-flow-rules
+            rule-type: flow
+        degrade:
+          nacos:
+            server-addr: ${spring.cloud.nacos.discovery.server-addr}
+            username: ${spring.cloud.nacos.discovery.username}
+            password: ${spring.cloud.nacos.discovery.password}
+            groupId: SENTINEL_GROUP
+            dataId: ${spring.application.name}-degrade-rules
+            rule-type: degrade
+        param-flow:
+          nacos:
+            server-addr: ${spring.cloud.nacos.discovery.server-addr}
+            username: ${spring.cloud.nacos.discovery.username}
+            password: ${spring.cloud.nacos.discovery.password}
+            groupId: SENTINEL_GROUP
+            dataId: ${spring.application.name}-param-rules
+            rule-type: param-flow
+        system:
+          nacos:
+            server-addr: ${spring.cloud.nacos.discovery.server-addr}
+            username: ${spring.cloud.nacos.discovery.username}
+            password: ${spring.cloud.nacos.discovery.password}
+            groupId: SENTINEL_GROUP
+            dataId: ${spring.application.name}-system-rules
+            rule-type: system
+        authority:
+          nacos:
+            server-addr: ${spring.cloud.nacos.discovery.server-addr}
+            username: ${spring.cloud.nacos.discovery.username}
+            password: ${spring.cloud.nacos.discovery.password}
+            groupId: SENTINEL_GROUP
+            dataId: ${spring.application.name}-authority-rules
+            rule-type: authority
+  zipkin:
+    base-url: http://localhost:9411
+    discovery-client-enabled: false
+  sleuth:
+    sampler:
+      # 限速器，每秒采集10个请求，防止大并发过载。推荐
+      rate: 10
+  datasource:
+    url: jdbc:mysql://localhost:3306/cloud2218?serverTimezone=Asia/Shanghai&useSSL=false&useUnicode=true&characterEncoding=UTF-8
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: Xytt
+  rabbitmq:
+    host: 192.168.174.129
+    port: 5672
+    username: /text
+    password: /text
+    virtual-host: /text
+    listener:
+      simple:
+        acknowledge-mode: manual # 手动ACK
+# mybatis
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: org.example.cloudentity.domain
+  configuration:
+    map-underscore-to-camel-case: true
+# 日志
+logging:
+  level:
+    org.example.cloudskill.dao: debug
+
+# 端口号 秒杀服务 6040
+server:
+  port: 6040
+
+feign:
+  sentinel:
+    enabled: true
+
+seata:
+  enabled: true
+  enable-auto-data-source-proxy: true
+  config:
+    type: nacos
+    nacos:
+      server-addr: 127.0.0.1:8848
+      group: SEATA_GROUP
+      username: nacos
+      password: nacos
+      data-id: seataServer.properties
+  registry:
+    type: nacos
+    nacos:
+      application: seata-server
+      server-addr: 127.0.0.1:8848
+      group: SEATA_GROUP
+      username: nacos
+      password: nacos

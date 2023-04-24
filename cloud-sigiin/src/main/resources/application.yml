@@ -1,0 +1,9 @@
+spring:
+  redis:
+    host: 192.168.176.129
+  application:
+    name: cloud-signin
+# 签到服务的端口号
+server:
+  port: 6010
+

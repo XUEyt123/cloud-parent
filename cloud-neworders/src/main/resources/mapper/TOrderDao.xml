@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.example.cloud.neworder.dao.TOrderDao">
+
+    <resultMap type="org.example.cloud.neworder.entity.TOrder" id="TOrderMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="uid" column="uid" jdbcType="INTEGER"/>
+        <result property="uaid" column="uaid" jdbcType="INTEGER"/>
+        <result property="totalMoney" column="total_money" jdbcType="NUMERIC"/>
+        <result property="payMoney" column="pay_money" jdbcType="NUMERIC"/>
+        <result property="freeMoney" column="free_money" jdbcType="NUMERIC"/>
+        <result property="payType" column="pay_type" jdbcType="INTEGER"/>
+        <result property="flag" column="flag" jdbcType="INTEGER"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="no" column="no" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="TOrderMap">
+        select id,
+               uid,
+               uaid,
+               total_money,
+               pay_money,
+               free_money,
+               pay_type,
+               flag,
+               create_time,
+               update_time, no
+        from t_order
+        where id = #{id}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAll" resultMap="TOrderMap">
+        select id,
+               uid,
+               uaid,
+               total_money,
+               pay_money,
+               free_money,
+               pay_type,
+               flag,
+               create_time,
+               update_time, no
+        from t_order
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into t_order(uid, uaid, total_money, pay_money, free_money, pay_type, flag, create_time, update_time, no)
+        values (#{uid}, #{uaid}, #{totalMoney}, #{payMoney}, #{freeMoney}, #{payType}, #{flag}, #{createTime},
+                #{updateTime}, #{no})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into t_order(uid, uaid, total_money, pay_money, free_money, pay_type, flag, create_time, update_time, no)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.uid}, #{entity.uaid}, #{entity.totalMoney}, #{entity.payMoney}, #{entity.freeMoney},
+            #{entity.payType}, #{entity.flag}, #{entity.createTime}, #{entity.updateTime}, #{entity.no})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into t_order(uid, uaid, total_money, pay_money, free_money, pay_type, flag, create_time, update_time, no)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.uid}, #{entity.uaid}, #{entity.totalMoney}, #{entity.payMoney}, #{entity.freeMoney},
+            #{entity.payType}, #{entity.flag}, #{entity.createTime}, #{entity.updateTime}, #{entity.no})
+        </foreach>
+        on duplicate key update
+        uid = values(uid),
+        uaid = values(uaid),
+        total_money = values(total_money),
+        pay_money = values(pay_money),
+        free_money = values(free_money),
+        pay_type = values(pay_type),
+        flag = values(flag),
+        create_time = values(create_time),
+        update_time = values(update_time),
+        no = values(no)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update t_order
+        <set>
+            <if test="uid != null">
+                uid = #{uid},
+            </if>
+            <if test="uaid != null">
+                uaid = #{uaid},
+            </if>
+            <if test="totalMoney != null">
+                total_money = #{totalMoney},
+            </if>
+            <if test="payMoney != null">
+                pay_money = #{payMoney},
+            </if>
+            <if test="freeMoney != null">
+                free_money = #{freeMoney},
+            </if>
+            <if test="payType != null">
+                pay_type = #{payType},
+            </if>
+            <if test="flag != null">
+                flag = #{flag},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+            <if test="no != null and no != ''">
+                no = #{no},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from t_order
+        where id = #{id}
+    </delete>
+
+</mapper>

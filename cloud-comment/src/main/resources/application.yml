@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: cloud-comment
+server:
+  port: 6050

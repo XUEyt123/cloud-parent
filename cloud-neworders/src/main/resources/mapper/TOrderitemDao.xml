@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.example.cloud.neworder.dao.TOrderitemDao">
+
+    <resultMap type="org.example.cloud.neworder.entity.TOrderitem" id="TOrderitemMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="oid" column="oid" jdbcType="INTEGER"/>
+        <result property="gid" column="gid" jdbcType="INTEGER"/>
+        <result property="price" column="price" jdbcType="NUMERIC"/>
+        <result property="num" column="num" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <select id="queryOrderDetailsByOid" parameterType="int" resultType="com.qf.cloudentity.dto.OrderDetailDto">
+        select oi.id,
+               oi.oid,
+               oi.gid,
+               go.status,
+               go.title,
+               go.small_pic,
+               oi.price,
+               oi.num
+        from t_orderitem oi
+                 inner join t_goods go
+        on oi.gid= go.id
+        where oi.oid=#{oid}
+    </select>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="TOrderitemMap">
+        select id,
+               oid,
+               gid,
+               price,
+               num
+        from t_orderitem
+        where id = #{id}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAll" resultMap="TOrderitemMap">
+        select id,
+               oid,
+               gid,
+               price,
+               num
+        from t_orderitem
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into t_orderitem(oid, gid, price, num)
+        values (#{oid}, #{gid}, #{price}, #{num})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into t_orderitem(oid, gid, price, num)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.oid}, #{entity.gid}, #{entity.price}, #{entity.num})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into t_orderitem(oid, gid, price, num)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.oid}, #{entity.gid}, #{entity.price}, #{entity.num})
+        </foreach>
+        on duplicate key update
+        oid = values(oid),
+        gid = values(gid),
+        price = values(price),
+        num = values(num)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update t_orderitem
+        <set>
+            <if test="oid != null">
+                oid = #{oid},
+            </if>
+            <if test="gid != null">
+                gid = #{gid},
+            </if>
+            <if test="price != null">
+                price = #{price},
+            </if>
+            <if test="num != null">
+                num = #{num},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from t_orderitem
+        where id = #{id}
+    </delete>
+
+</mapper>
+

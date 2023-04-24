@@ -1,0 +1,92 @@
+server:
+  #gateway的端口
+  port: 8040
+spring:
+  application:
+    name: cloud-gateway
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+        username: nacos
+        password: nacos
+    # sentinel配置
+    sentinel:
+    transport:
+      dashboard: localhost:8888
+    datasource:
+      flow:
+        nacos:
+          server-addr: ${spring.cloud.nacos.discovery.server-addr}
+          username: nacos
+          password: nacos
+          groupId: SENTINEL_GROUP
+          dataId: ${spring.application.name}-flow-rules
+          rule-type: flow
+      degrade:
+        nacos:
+          server-addr: ${spring.cloud.nacos.discovery.server-addr}
+          username: nacos
+          password: nacos
+          groupId: SENTINEL_GROUP
+          dataId: ${spring.application.name}-degrade-rules
+          rule-type: degrade
+      param-flow:
+        nacos:
+          server-addr: ${spring.cloud.nacos.discovery.server-addr}
+          username: nacos
+          password: nacos
+          groupId: SENTINEL_GROUP
+          dataId: ${spring.application.name}-param-rules
+          rule-type: param-flow
+      system:
+        nacos:
+          server-addr: ${spring.cloud.nacos.discovery.server-addr}
+          username: nacos
+          password: nacos
+          groupId: SENTINEL_GROUP
+          dataId: ${spring.application.name}-system-rules
+          rule-type: system
+      authority:
+        nacos:
+          server-addr: ${spring.cloud.nacos.discovery.server-addr}
+          username: nacos
+          password: nacos
+          groupId: SENTINEL_GROUP
+          dataId: ${spring.application.name}-authority-rules
+          rule-type: authority
+    # 网关配置
+    gateway:
+      # 路由配置 可以配置很多路由定义所以传list形式
+      routes:
+        # 订单服务的路由配置
+        - id: cloud-orders
+          uri: lb://cloud-orders
+          predicates:
+            - Path=/orders/**
+            # 请求发起的时间如果在这个配置的时间之后，断言通过，路由生效
+            # - After=2023-03-11T11:45:00.317+08:00[Asia/Shanghai]
+            # - Before=2023-03-11T11:45:00.317+08:00[Asia/Shanghai]
+            # - Between=2023-03-11T11:48:00.317+08:00[Asia/Shanghai],2023-03-11T11:48:10.317+08:00[Asia/Shanghai]
+            # 要求请求必须携带Cookie 键是age 值是18
+            # - Cookie=age,18
+            # 要求请求头中必须有token值必须是123
+            # - Header=token,123
+            # 要求必须是指定的主机[域名]发起的请求才能通过
+            # - Host=goods.wfx.com,**.jd.com
+            # 请求方式必须是下面指定的,如果有多个值就使用,逗号隔开
+            # - Method=GET
+            # Query要求请求参数必须包含指定的值
+            # - Query=name,zs
+            # RemoteAddr要求发起请求的服务器地址必须是下面指定的地址
+          filters:
+            - AddRequestHeader=name,xiaoming
+            - AddRequestParameter=age,18
+            - CalServiceTime
+  zipkin:
+    base-url: http://localhost:9411
+    discovery-client-enabled: false
+  sleuth:
+    sampler:
+      # 限速器，每秒采集10个请求，防止大并发过载。推荐
+      rate: 10

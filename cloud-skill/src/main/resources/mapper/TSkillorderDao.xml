@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.example.cloudskill.dao.TSkillorderDao">
+
+    <resultMap type="org.example.cloudskill.entity.TSkillorder" id="TSkillorderMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="no" column="no" jdbcType="VARCHAR"/>
+        <result property="sgid" column="sgid" jdbcType="INTEGER"/>
+        <result property="price" column="price" jdbcType="NUMERIC"/>
+        <result property="num" column="num" jdbcType="INTEGER"/>
+        <result property="flag" column="flag" jdbcType="INTEGER"/>
+        <result property="ctime" column="ctime" jdbcType="TIMESTAMP"/>
+        <result property="utime" column="utime" jdbcType="TIMESTAMP"/>
+        <result property="uaid" column="uaid" jdbcType="INTEGER"/>
+        <result property="uid" column="uid" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="TSkillorderMap">
+        select id, no, sgid, price, num, flag, ctime, utime, uaid, uid
+        from t_skillorder
+        where id = #{id}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAll" resultMap="TSkillorderMap">
+        select id, no, sgid, price, num, flag, ctime, utime, uaid, uid
+        from t_skillorder
+    </select>
+
+
+    <select id="queryByUidAndSgid" resultMap="TSkillorderMap">
+        select id, no, sgid, price, num, flag, ctime, utime, uaid, uid
+        from t_skillorder
+        where uid=#{uid}
+          and sgid=#{sgid}
+
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into t_skillorder(no, sgid, price, num, flag, ctime, utime, uaid, uid)
+        values (#{no}, #{sgid}, #{price}, #{num}, #{flag}, #{ctime}, #{utime}, #{uaid}, #{uid})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into t_skillorder(no, sgid, price, num, flag, ctime, utime, uaid, uid)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.no}, #{entity.sgid}, #{entity.price}, #{entity.num}, #{entity.flag}, #{entity.ctime},
+            #{entity.utime}, #{entity.uaid}, #{entity.uid})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into t_skillorder(no, sgid, price, num, flag, ctime, utime, uaid, uid)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.no}, #{entity.sgid}, #{entity.price}, #{entity.num}, #{entity.flag}, #{entity.ctime},
+            #{entity.utime}, #{entity.uaid}, #{entity.uid})
+        </foreach>
+        on duplicate key update
+        no = values(no),
+        sgid = values(sgid),
+        price = values(price),
+        num = values(num),
+        flag = values(flag),
+        ctime = values(ctime),
+        utime = values(utime),
+        uaid = values(uaid),
+        uid = values(uid)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update t_skillorder
+        <set>
+            <if test="no != null and no != ''">
+                no = #{no},
+            </if>
+            <if test="sgid != null">
+                sgid = #{sgid},
+            </if>
+            <if test="price != null">
+                price = #{price},
+            </if>
+            <if test="num != null">
+                num = #{num},
+            </if>
+            <if test="flag != null">
+                flag = #{flag},
+            </if>
+            <if test="ctime != null">
+                ctime = #{ctime},
+            </if>
+            <if test="utime != null">
+                utime = #{utime},
+            </if>
+            <if test="uaid != null">
+                uaid = #{uaid},
+            </if>
+            <if test="uid != null">
+                uid = #{uid},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from t_skillorder
+        where id = #{id}
+    </delete>
+
+</mapper>
+

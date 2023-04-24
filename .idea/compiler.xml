@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="cloud-neworders" />
+        <module name="cloud-entity" />
+        <module name="cloud-coupon" />
+        <module name="cloud-api" />
+        <module name="cloud-goods" />
+        <module name="cloud-sigiin" />
+        <module name="cloud-orders" />
+        <module name="cloud-comment" />
+        <module name="cloud-gateway" />
+        <module name="cloud-common" />
+        <module name="cloud-jifen" />
+        <module name="cloud-goodsddd" />
+        <module name="cloud-skill" />
+        <module name="cloud-chat" />
+        <module name="cloud-ai" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="ai" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="ai" options="-parameters" />
+      <module name="cloud-ai" options="-parameters" />
+      <module name="cloud-api" options="-parameters" />
+      <module name="cloud-chat" options="-parameters" />
+      <module name="cloud-comment" options="-parameters" />
+      <module name="cloud-common" options="-parameters" />
+      <module name="cloud-coupon" options="-parameters" />
+      <module name="cloud-entity" options="-parameters" />
+      <module name="cloud-gateway" options="-parameters" />
+      <module name="cloud-goods" options="-parameters" />
+      <module name="cloud-goodsddd" options="-parameters" />
+      <module name="cloud-jifen" options="-parameters" />
+      <module name="cloud-neworders" options="-parameters" />
+      <module name="cloud-orders" options="-parameters" />
+      <module name="cloud-sigiin" options="-parameters" />
+      <module name="cloud-skill" options="-parameters" />
+    </option>
+  </component>
+</project>

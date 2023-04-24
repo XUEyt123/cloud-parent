@@ -1,0 +1,19 @@
+server:
+  port: 7000
+# 自定义的配置项，封装Netty的端口和路径
+netty:
+  port: 7001
+  path: /chat
+
+resources:
+  static-locations:
+    - classpath:/static/
+spring:
+  thymeleaf:
+    cache: false
+    checktemplatelocation: true
+    enabled: true
+    encoding: UTF-8
+    mode: HTML5
+    prefix: classpath:/templates/
+    suffix: .html
